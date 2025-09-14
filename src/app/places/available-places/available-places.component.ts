@@ -1,10 +1,10 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal, OnInit } from '@angular/core';
 
 import { Place } from '../place.model';
 import { PlacesComponent } from '../places.component';
 import { PlacesContainerComponent } from '../places-container/places-container.component';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
+import { PlacesService } from '../places.service';
 
 @Component({
   selector: 'app-available-places',
@@ -13,31 +13,53 @@ import { map } from 'rxjs';
   styleUrl: './available-places.component.css',
   imports: [PlacesComponent, PlacesContainerComponent],
 })
-export class AvailablePlacesComponent {
+
+export class AvailablePlacesComponent implements OnInit {
+  error = signal('');
   places = signal<Place[] | undefined>(undefined);
   isFetching = signal(false);
   private httpClient = inject(HttpClient);
+  private destroyRef = inject(DestroyRef);
+  private placesService = inject(PlacesService);
+
 
 
   ngOnInit() {
     this.isFetching.set(true);
-    this.httpClient.get<{ places: Place[] }>('http://localhost:3000/places')
-    .pipe(
-      map((resData) => resData.places)
-     )
-    .subscribe({
-      next : (places) => {
-       this.places.set(places);
-    },
-    complete : () => {
-    this.isFetching.set(false);
-    }
-  });
+    const subscription =
+      this.placesService.loadAvailablePlaces()
+        .subscribe({
+          next: (places) => {
+            this.places.set(places);
+          },
+          error: (error: Error) => {
+            this.error.set(error.message);
+          },
+          complete: () => {
+            this.isFetching.set(false);
+          }
+        });
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
 
+  }
 
-  
+  onSelectPlace(selectedPlace: Place) {
+    const subscription = this.placesService.addPlaceToUserPlaces(selectedPlace)
+      .subscribe({
+        next: (resData) => console.log(resData),
+      });
+
+    this.destroyRef.onDestroy(() => {
+      subscription.unsubscribe();
+    });
   }
 
 
 
 }
+
+
+
+
