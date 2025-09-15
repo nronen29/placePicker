@@ -12,6 +12,7 @@ import { Place } from './place.model';
 export class PlacesComponent {
   places = input.required<Place[]>();
   selectPlace = output<Place>();
+  showRemoveButton = input<boolean>(false);
 
   onSelectPlace(place: Place) {
     this.selectPlace.emit(place);
