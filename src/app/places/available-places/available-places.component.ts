@@ -99,7 +99,7 @@ export class AvailablePlacesComponent implements OnInit {
     const { lat, lon } = place;
     const selectedRegion = this.searchFilter().region;
 
-    // rough region boundaries - not perfect but works for most places
+   
     switch (selectedRegion) {
       case 'europe':
         return lat >= 35 && lat <= 70 && lon >= -10 && lon <= 70;
