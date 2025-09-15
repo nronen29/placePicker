@@ -12,23 +12,25 @@ export interface Toast {
 })
 export class ToastService {
     private toasts = signal<Toast[]>([]);
-    private nextId = 1;
+    private nextId = 1; // simple counter for unique IDs
 
     getToasts = this.toasts.asReadonly();
 
     show(message: string, type: Toast['type'] = 'info', duration = 4000) {
-        const toast: Toast = {
+        const newToast: Toast = {
             id: this.nextId++,
             message,
             type,
             duration
         };
 
-        this.toasts.update(toasts => [...toasts, toast]);
+        // add to the list
+        this.toasts.update(currentToasts => [...currentToasts, newToast]);
 
+        // auto remove after duration
         if (duration > 0) {
             setTimeout(() => {
-                this.remove(toast.id);
+                this.remove(newToast.id);
             }, duration);
         }
     }
@@ -50,7 +52,9 @@ export class ToastService {
     }
 
     remove(id: number) {
-        this.toasts.update(toasts => toasts.filter(toast => toast.id !== id));
+        this.toasts.update(currentToasts =>
+            currentToasts.filter(toast => toast.id !== id)
+        );
     }
 
     clear() {

@@ -23,10 +23,12 @@ import { ToastService } from '../../shared/toast/toast.service';
 export class UserPlacesComponent implements OnInit {
   error = signal('');
   isFetching = signal(false);
+
   private placesService = inject(PlacesService);
   private destroyRef = inject(DestroyRef);
   private toastService = inject(ToastService);
-  places = this.placesService.loadedUserPlaces;
+
+  places = this.placesService.loadedUserPlaces; // get user's saved places
 
   ngOnInit() {
     this.isFetching.set(true);
@@ -45,18 +47,19 @@ export class UserPlacesComponent implements OnInit {
   }
 
   onRemovePlace(place: Place) {
-    const subscription = this.placesService.removeUserPlace(place)
+    // remove place from user's favorites
+    const sub = this.placesService.removeUserPlace(place)
       .subscribe({
         next: () => {
           this.toastService.success(`${place.title} removed from favorites`);
         },
-        error: (error) => {
-          this.toastService.error(error.message || 'Failed to remove place');
+        error: (err) => {
+          this.toastService.error(err.message || 'Failed to remove place');
         }
       });
 
     this.destroyRef.onDestroy(() => {
-      subscription.unsubscribe();
+      sub.unsubscribe();
     });
   }
 

@@ -9,7 +9,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     styleUrl: './navigation.component.css'
 })
 export class NavigationComponent {
-    isMenuOpen = false;
+    isMenuOpen = false; // for mobile menu toggle
 
     toggleMenu() {
         this.isMenuOpen = !this.isMenuOpen;

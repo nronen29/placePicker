@@ -12,9 +12,9 @@ import { Place } from './place.model';
 export class PlacesComponent {
   places = input.required<Place[]>();
   selectPlace = output<Place>();
-  showRemoveButton = input<boolean>(false);
+  showRemoveButton = input<boolean>(false); // whether to show X button for removing
 
-  onSelectPlace(place: Place) {
-    this.selectPlace.emit(place);
+  onSelectPlace(selectedPlace: Place) {
+    this.selectPlace.emit(selectedPlace);
   }
 }

@@ -1,4 +1,3 @@
-/* Loading Skeleton Styles */
 .skeleton-grid {
   max-width: 80rem;
   display: grid;
@@ -52,14 +51,13 @@
   }
 }
 
-/* Dark mode support */
+/* dark mode */
 @media (prefers-color-scheme: dark) {
   .skeleton-card {
     background: #2d3748;
   }
   
-  .skeleton-image,
-  .skeleton-title {
+  .skeleton-image, .skeleton-title {
     background: linear-gradient(90deg, #4a5568 25%, #2d3748 50%, #4a5568 75%);
     background-size: 200% 100%;
   }

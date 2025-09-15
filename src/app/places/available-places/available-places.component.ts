@@ -28,22 +28,22 @@ export class AvailablePlacesComponent implements OnInit {
   private placesService = inject(PlacesService);
   private toastService = inject(ToastService);
 
-  // Computed property for filtered places
+  // filter places based on search and region
   filteredPlaces = computed(() => {
-    const places = this.places();
-    const filter = this.searchFilter();
+    const allPlaces = this.places();
+    const currentFilter = this.searchFilter();
 
-    if (!places) return undefined;
+    if (!allPlaces) return undefined;
 
-    return places.filter(place => {
-      // Search term filter
-      const matchesSearch = !filter.searchTerm ||
-        place.title.toLowerCase().includes(filter.searchTerm.toLowerCase());
+    return allPlaces.filter(place => {
+      // check if search term matches title
+      const searchMatch = !currentFilter.searchTerm ||
+        place.title.toLowerCase().includes(currentFilter.searchTerm.toLowerCase());
 
-      // Region filter (basic implementation based on coordinates)
-      const matchesRegion = filter.region === 'all' || this.getRegionFromCoords(place);
+      // check region filter
+      const regionMatch = currentFilter.region === 'all' || this.checkRegion(place);
 
-      return matchesSearch && matchesRegion;
+      return searchMatch && regionMatch;
     });
   });
 
@@ -95,22 +95,22 @@ export class AvailablePlacesComponent implements OnInit {
     this.ngOnInit();
   }
 
-  private getRegionFromCoords(place: Place): boolean {
+  private checkRegion(place: Place): boolean {
     const { lat, lon } = place;
-    const region = this.searchFilter().region;
+    const selectedRegion = this.searchFilter().region;
 
-    // Simple region detection based on coordinates
-    switch (region) {
+    // rough region boundaries - not perfect but works for most places
+    switch (selectedRegion) {
       case 'europe':
         return lat >= 35 && lat <= 70 && lon >= -10 && lon <= 70;
       case 'asia':
         return lat >= -10 && lat <= 70 && lon >= 70 && lon <= 180;
       case 'americas':
-        return lon >= -180 && lon <= -30;
+        return lon >= -180 && lon <= -30; // covers north and south america
       case 'africa':
         return lat >= -35 && lat <= 35 && lon >= -20 && lon <= 50;
       default:
-        return true;
+        return true; // 'all' region
     }
   }
 

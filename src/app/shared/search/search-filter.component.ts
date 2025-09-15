@@ -14,27 +14,28 @@ export interface SearchFilterData {
 })
 export class SearchFilterComponent {
     searchTerm = signal('');
-    selectedRegion = signal('all');
+    selectedRegion = signal('all'); // default to show all places
 
     filterChange = output<SearchFilterData>();
 
     onSearchChange(event: Event) {
         const input = event.target as HTMLInputElement;
         this.searchTerm.set(input.value);
-        this.emitFilterChange();
+        this.updateFilters();
     }
 
     onRegionChange(region: string) {
         this.selectedRegion.set(region);
-        this.emitFilterChange();
+        this.updateFilters();
     }
 
     clearSearch() {
         this.searchTerm.set('');
-        this.emitFilterChange();
+        this.updateFilters(); // update filters after clearing
     }
 
-    private emitFilterChange() {
+    // emit the current filter state
+    private updateFilters() {
         this.filterChange.emit({
             searchTerm: this.searchTerm(),
             region: this.selectedRegion()

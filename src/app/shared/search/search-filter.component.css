@@ -1,4 +1,4 @@
-/* Search Filter Styles */
+/* search and filter styles */
 .search-container {
   max-width: 80rem;
   margin: 0 auto 2rem auto;
@@ -35,6 +35,7 @@
   background: white;
   transition: all 0.3s ease;
   outline: none;
+  font-family: inherit;
 }
 
 .search-input:focus {
