@@ -1,4 +1,5 @@
 import { Component, signal, OnInit, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { HttpClient } from '@angular/common/http';
 import { DestroyRef } from '@angular/core';
@@ -7,23 +8,24 @@ import { PlacesContainerComponent } from '../places-container/places-container.c
 import { PlacesComponent } from '../places.component';
 import { Place } from '../place.model';
 import { PlacesService } from '../places.service';
+import { LoadingSkeletonComponent } from '../../shared/loading/loading-skeleton.component';
+import { ToastService } from '../../shared/toast/toast.service';
 
 @Component({
   selector: 'app-user-places',
   standalone: true,
   templateUrl: './user-places.component.html',
   styleUrl: './user-places.component.css',
-  imports: [PlacesContainerComponent, PlacesComponent],
+  imports: [PlacesContainerComponent, PlacesComponent, LoadingSkeletonComponent, RouterLink],
 })
 
 
 export class UserPlacesComponent implements OnInit {
-
-
   error = signal('');
   isFetching = signal(false);
   private placesService = inject(PlacesService);
   private destroyRef = inject(DestroyRef);
+  private toastService = inject(ToastService);
   places = this.placesService.loadedUserPlaces;
 
   ngOnInit() {
@@ -43,12 +45,24 @@ export class UserPlacesComponent implements OnInit {
   }
 
   onRemovePlace(place: Place) {
-    const subscription = this.placesService.removeUserPlace(place).subscribe();
+    const subscription = this.placesService.removeUserPlace(place)
+      .subscribe({
+        next: () => {
+          this.toastService.success(`${place.title} removed from favorites`);
+        },
+        error: (error) => {
+          this.toastService.error(error.message || 'Failed to remove place');
+        }
+      });
 
     this.destroyRef.onDestroy(() => {
       subscription.unsubscribe();
     });
+  }
 
+  onRetry() {
+    this.error.set('');
+    this.ngOnInit();
   }
 }
 

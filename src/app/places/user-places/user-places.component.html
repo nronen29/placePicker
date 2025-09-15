@@ -1,15 +1,33 @@
 <app-places-container title="Your Favorite Places">
   @if (isFetching() && !error()) {
-  <p class="fallback-text">fetching your favorite places...</p>
+  <app-loading-skeleton />
   } @if (error()) {
-  <p class="fallback-text">{{ error() }}</p>
-  } @if (places()) {
+  <div class="error-state">
+    <div class="error-icon">😞</div>
+    <h3>Oops! Something went wrong</h3>
+    <p>{{ error() }}</p>
+    <button class="retry-btn" (click)="onRetry()">Try Again</button>
+  </div>
+  } @if (places() && !isFetching()) { @if (places()!.length > 0) {
+  <div class="favorites-header">
+    <div class="favorites-count">
+      <span class="count">{{ places()!.length }}</span>
+      <span class="label">{{
+        places()!.length === 1 ? "favorite place" : "favorite places"
+      }}</span>
+    </div>
+  </div>
   <app-places
     [places]="places()!"
     [showRemoveButton]="true"
     (selectPlace)="onRemovePlace($event)"
   />
-  } @else if (places().length === 0) {
-  <p class="fallback-text">Unfortunately, no places could be found.</p>
-  }
+  } @else {
+  <div class="empty-favorites">
+    <div class="empty-icon">❤️</div>
+    <h3>No favorites yet</h3>
+    <p>Start exploring and add places you'd love to visit!</p>
+    <button class="explore-btn" routerLink="/places">Explore Places</button>
+  </div>
+  } }
 </app-places-container>
