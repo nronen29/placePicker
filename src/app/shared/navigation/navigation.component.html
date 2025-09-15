@@ -1,0 +1,28 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-brand">
+      <img src="logo.png" alt="PlacePicker Logo" class="nav-logo" />
+      <span class="nav-title" routerLink="/">PlacePicker</span>
+    </div>
+
+    <div class="nav-menu" [class.active]="isMenuOpen">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link"
+      >
+        Home
+      </a>
+      <a routerLink="/places" routerLinkActive="active" class="nav-link">
+        Explore Places
+      </a>
+    </div>
+
+    <div class="nav-toggle" (click)="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</nav>

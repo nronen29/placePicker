@@ -1,0 +1,103 @@
+<div class="home-container">
+  <section class="hero">
+    <div class="hero-content">
+      <img src="logo.png" alt="PlacePicker Logo" class="hero-logo" />
+      <h1 class="hero-title">Welcome to PlacePicker</h1>
+      <p class="hero-subtitle">
+        Your personal travel companion for discovering and organizing amazing
+        places around the world
+      </p>
+      <div class="hero-buttons">
+        <button class="btn-primary" routerLink="/places">Explore Places</button>
+        <button class="btn-secondary" (click)="scrollToFeatures()">
+          Learn More
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="features" #featuresSection>
+    <div class="container">
+      <h2 class="section-title">What You Can Do</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h3>Discover Amazing Places</h3>
+          <p>
+            Browse through a curated collection of breathtaking destinations
+            from around the world, from serene waterfalls to bustling city
+            streets.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">❤️</div>
+          <h3>Save Your Favorites</h3>
+          <p>
+            Create your personal wishlist by saving places you'd love to visit.
+            Keep track of your dream destinations in one convenient location.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📍</div>
+          <h3>Organize Your Collection</h3>
+          <p>
+            Manage your saved places effortlessly. Add new discoveries and
+            remove places you've already visited or are no longer interested in.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="container">
+      <div class="about-content">
+        <div class="about-text">
+          <h2>About PlacePicker</h2>
+          <p>
+            PlacePicker is designed for travel enthusiasts who want to keep
+            track of incredible places they discover. Whether you're planning
+            your next adventure or simply dreaming about future travels,
+            PlacePicker helps you organize and visualize your travel
+            aspirations.
+          </p>
+          <p>
+            Our carefully curated collection includes diverse destinations
+            spanning continents - from the mystical Northern Lights in Iceland
+            to the ancient temples of Japan, from the pristine beaches of the
+            Caribbean to the majestic peaks of the Himalayas.
+          </p>
+        </div>
+        <div class="about-stats">
+          <div class="stat">
+            <div class="stat-number">18+</div>
+            <div class="stat-label">Amazing Places</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">7</div>
+            <div class="stat-label">Continents</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">∞</div>
+            <div class="stat-label">Possibilities</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="container">
+      <h2>Ready to Start Your Journey?</h2>
+      <p>
+        Begin exploring amazing destinations and start building your personal
+        collection today!
+      </p>
+      <button class="btn-primary large" routerLink="/places">
+        Start Exploring
+      </button>
+    </div>
+  </section>
+</div>
