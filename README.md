@@ -109,7 +109,7 @@ ng serve
 
 ## Development Team
 This project was developed as part of our studies at **Tel Hai College** by:
-- **Lior Yanoka**
+- **Lior Yanuka**
 - **Neta Ronen**
 
 
