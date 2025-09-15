@@ -42,70 +42,127 @@ app.use((req, res, next) => {
 app.get("/places", async (req, res) => {
   await new Promise((resolve) => setTimeout(resolve, 3000));
   
-  const fileContent = await fs.readFile("./data/places.json");
+  try {
+    const [rows] = await pool.query(`
+      SELECT p.id, p.title, p.lat, p.lon, i.src, i.alt
+      FROM places p
+      LEFT JOIN images i ON p.id = i.place_id
+    `);
 
-  const placesData = JSON.parse(fileContent);
+    const placesData = rows.map(row => ({
+      id: row.id,
+      title: row.title,
+      lat: row.lat,
+      lon: row.lon,
+      image: {
+        src: row.src,
+        alt: row.alt
+      }
+    }));
 
-  res.status(200).json({ places: placesData });
+    res.status(200).json({ places: placesData });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching places" });
+  }
 });
 
 app.get("/user-places", async (req, res) => {
-  const fileContent = await fs.readFile("./data/user-places.json");
+  try {
+    const [rows] = await pool.query(`
+      SELECT p.id, p.title, p.lat, p.lon, i.src, i.alt
+      FROM user_places up
+      JOIN places p ON up.place_id = p.id
+      LEFT JOIN images i ON p.id = i.place_id
+      WHERE up.user_id = 'u1'
+    `);
 
-  const places = JSON.parse(fileContent);
+    const places = rows.map(row => ({
+      id: row.id,
+      title: row.title,
+      lat: row.lat,
+      lon: row.lon,
+      image: {
+        src: row.src,
+        alt: row.alt
+      }
+    }));
 
-  res.status(200).json({ places });
+    res.status(200).json({ places });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user places" });
+  }
 });
 
 app.put("/user-places", async (req, res) => {
-
   const placeId = req.body.placeId;
-  //return res.status(500).json();
 
+  try {
+    // Insert the user-place relationship (ignore if already exists)
+    await pool.query(`
+      INSERT IGNORE INTO user_places (user_id, place_id)
+      VALUES ('u1', ?)
+    `, [placeId]);
 
-  const fileContent = await fs.readFile("./data/places.json");
-  const placesData = JSON.parse(fileContent);
+    // Get all user places to return in response
+    const [rows] = await pool.query(`
+      SELECT p.id, p.title, p.lat, p.lon, i.src, i.alt
+      FROM user_places up
+      JOIN places p ON up.place_id = p.id
+      LEFT JOIN images i ON p.id = i.place_id
+      WHERE up.user_id = 'u1'
+    `);
 
-  const place = placesData.find((place) => place.id === placeId);
+    const updatedUserPlaces = rows.map(row => ({
+      id: row.id,
+      title: row.title,
+      lat: row.lat,
+      lon: row.lon,
+      image: {
+        src: row.src,
+        alt: row.alt
+      }
+    }));
 
-  const userPlacesFileContent = await fs.readFile("./data/user-places.json");
-  const userPlacesData = JSON.parse(userPlacesFileContent);
-
-  let updatedUserPlaces = userPlacesData;
-
-  if (!userPlacesData.some((p) => p.id === place.id)) {
-    updatedUserPlaces = [...userPlacesData, place];
+    res.status(200).json({ userPlaces: updatedUserPlaces });
+  } catch (error) {
+    res.status(500).json({ message: "Error adding user place" });
   }
-
-  await fs.writeFile(
-    "./data/user-places.json",
-    JSON.stringify(updatedUserPlaces)
-  );
-
-  res.status(200).json({ userPlaces: updatedUserPlaces });
 });
 
 app.delete("/user-places/:id", async (req, res) => {
   const placeId = req.params.id;
 
+  try {
+    // Delete the user-place relationship
+    await pool.query(`
+      DELETE FROM user_places 
+      WHERE user_id = 'u1' AND place_id = ?
+    `, [placeId]);
 
-  const userPlacesFileContent = await fs.readFile("./data/user-places.json");
-  const userPlacesData = JSON.parse(userPlacesFileContent);
+    // Get remaining user places to return in response
+    const [rows] = await pool.query(`
+      SELECT p.id, p.title, p.lat, p.lon, i.src, i.alt
+      FROM user_places up
+      JOIN places p ON up.place_id = p.id
+      LEFT JOIN images i ON p.id = i.place_id
+      WHERE up.user_id = 'u1'
+    `);
 
-  const placeIndex = userPlacesData.findIndex((place) => place.id === placeId);
+    const updatedUserPlaces = rows.map(row => ({
+      id: row.id,
+      title: row.title,
+      lat: row.lat,
+      lon: row.lon,
+      image: {
+        src: row.src,
+        alt: row.alt
+      }
+    }));
 
-  let updatedUserPlaces = userPlacesData;
-
-  if (placeIndex >= 0) {
-    updatedUserPlaces.splice(placeIndex, 1);
+    res.status(200).json({ userPlaces: updatedUserPlaces });
+  } catch (error) {
+    res.status(500).json({ message: "Error removing user place" });
   }
-
-  await fs.writeFile(
-    "./data/user-places.json",
-    JSON.stringify(updatedUserPlaces)
-  );
-
-  res.status(200).json({ userPlaces: updatedUserPlaces });
 });
 
 // 404
