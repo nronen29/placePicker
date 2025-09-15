@@ -1,19 +1,19 @@
 # PlacePicker
 
-A full-stack web application for exploring and collecting amazing travel destinations worldwide.
+A full-stack web application for exploring and collecting amazing travel destinations worldwide. This is a responsive web app designed to run in web browsers
 
 ## Project Overview
 
-PlacePicker is a modern web application that allows users to discover incredible places around the world and create their personal collection of favorite destinations. Whether you're planning your next adventure or simply dreaming about future travels, PlacePicker helps you organize and visualize your travel aspirations.
+PlacePicker is a modern web application that runs  in web browsers, allowing users to discover incredible places around the world and create their personal collection of favorite destinations. 
 
 ## Features
 
 - **Explore Places**: Browse through a curated collection of breathtaking destinations from around the world
 - **Personal Favorites**: Save places you'd love to visit to your personal collection
-- **Smart Search**: Real-time search functionality to find places by name
-- **Region Filters**: Filter destinations by geographic regions (Europe, Asia, Americas, Africa)
-- **Responsive Design**: Optimized for all devices - desktop, tablet, and mobile
-- **Modern UI**: Beautiful, intuitive interface with smooth animations
+- **Smart Search**:  search functionality to find places by name
+- **Region Filters**: Filter destinations by geographic regions 
+- **Responsive Design**: Optimized for desktop
+- **Modern UI**:  intuitive interface
 - **Toast Notifications**: User-friendly feedback for all actions
 
 ## Technology Stack
@@ -21,7 +21,7 @@ PlacePicker is a modern web application that allows users to discover incredible
 ### Frontend
 - **Angular 18** - Modern TypeScript-based web framework
 - **TypeScript** - Type-safe JavaScript for better development experience
-- **CSS3** - Modern styling with animations and responsive design
+- **CSS3** - Modern styling with animations and responsive design (No Bootstrap used)
 - **HTML5** - Semantic markup for accessibility
 
 ### Backend
@@ -103,8 +103,11 @@ ng serve
 2. Create tables using the provided schema
 3. Update database credentials in `backend/app.js`
 
-## Development Team
+## Design Approach
 
+### Custom CSS (No Bootstrap)
+
+## Development Team
 This project was developed as part of our studies at **Tel Hai College** by:
 - **Lior Yanoka**
 - **Neta Ronen**
