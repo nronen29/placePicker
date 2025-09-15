@@ -1,11 +1,31 @@
 <app-places-container title="Available Places">
-  @if (isFetching()) {
-    <p class="fallback-text">fetching places...</p>
-  }
+  <app-search-filter (filterChange)="onFilterChange($event)" />
 
-  @if (places()) {
-  <app-places [places]="places()!" />
-  } @else if (places()?.length === 0) {
-  <p class="fallback-text">Unfortunately, no places could be found.</p>
-  }
+  @if (isFetching() && !error()) {
+  <app-loading-skeleton />
+  } @if (error()) {
+  <div class="error-state">
+    <div class="error-icon">😞</div>
+    <h3>Oops! Something went wrong</h3>
+    <p>{{ error() }}</p>
+    <button class="retry-btn" (click)="onRetry()">Try Again</button>
+  </div>
+  } @if (filteredPlaces() && !isFetching()) { @if (filteredPlaces()!.length > 0)
+  {
+  <app-places
+    [places]="filteredPlaces()!"
+    (selectPlace)="onSelectPlace($event)"
+  />
+
+  @if (filteredPlaces()!.length !== places()?.length) {
+  <div class="filter-info">
+    Showing {{ filteredPlaces()!.length }} of {{ places()?.length }} places
+  </div>
+  } } @else {
+  <div class="empty-state">
+    <div class="empty-icon">🔍</div>
+    <h3>No places found</h3>
+    <p>Try adjusting your search or filter criteria</p>
+  </div>
+  } }
 </app-places-container>
