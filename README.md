@@ -1,33 +1,30 @@
 # PlacePicker
 
-A full-stack web application for exploring and collecting amazing travel destinations worldwide. This is a responsive web app designed to run in web browsers
+A web application for exploring and collecting travel destinations around the world.
 
 ## Project Overview
 
-PlacePicker is a modern web application that runs  in web browsers, allowing users to discover incredible places around the world and create their personal collection of favorite destinations. 
+PlacePicker lets users browse through different places and save their favorites. Built with Angular frontend and Node.js backend. 
 
 ## Features
 
-- **Explore Places**: Browse through a curated collection of breathtaking destinations from around the world
-- **Personal Favorites**: Save places you'd love to visit to your personal collection
-- **Smart Search**:  search functionality to find places by name
-- **Region Filters**: Filter destinations by geographic regions 
-- **Responsive Design**: Optimized for desktop
-- **Modern UI**:  intuitive interface
-- **Toast Notifications**: User-friendly feedback for all actions
+- Browse different travel destinations
+- Save places to your favorites
+- Search for places by name
+- Filter by geographic regions
+- Responsive design for desktop
+- Toast notifications for user feedback
 
 ## Technology Stack
 
 ### Frontend
-- **Angular 18** - Modern TypeScript-based web framework
-- **TypeScript** - Type-safe JavaScript for better development experience
-- **CSS3** - Modern styling with animations and responsive design (No Bootstrap used)
-- **HTML5** - Semantic markup for accessibility
+- Angular 18 with TypeScript
+- Custom CSS (no Bootstrap)
+- HTML5
 
 ### Backend
-- **Node.js** - JavaScript runtime environment
-- **Express.js** - Fast, minimalist web framework
-- **JavaScript** - Server-side programming language
+- Node.js with Express.js
+- JavaScript
 
 ### Database
 - **MySQL** - Relational database management system
@@ -99,9 +96,42 @@ ng serve
 ```
 
 ### Database Setup
-1. Create MySQL database named `places_project`
-2. Create tables using the provided schema
-3. Update database credentials in `backend/app.js`
+
+#### Option 1: Using the SQL File (Recommended)
+1. Make sure your MySQL server is running
+2. Import the database using the `places_project.sql` file:
+   ```bash
+   # Command line
+   mysql -u root -p < places_project.sql
+   
+   # Or in MySQL Workbench:
+   # File -> Run SQL Script -> Select places_project.sql
+   ```
+3. This will create the database, tables, and insert all the sample data
+
+#### Option 2: Manual Setup
+1. Create a MySQL database called `places_project`
+2. Create the tables manually using the schema above
+3. Add your own data
+
+#### Database Configuration
+The backend connects to MySQL using these settings in `backend/app.js`:
+```javascript
+const pool = mysql.createPool({
+  host: '172.20.10.4',
+  port: 3306,
+  user: 'places_user',
+  password: 'StrongPassword123!',
+  database: 'places_project'
+});
+```
+Update these to match your MySQL configuration.
+
+#### What's Included
+The SQL file contains:
+- 18 travel destinations with descriptions and coordinates
+- Image data for each place (images are in `backend/images/`)
+- Sample user favorites to test the functionality
 
 ## Design Approach
 
